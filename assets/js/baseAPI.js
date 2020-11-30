@@ -2,6 +2,20 @@
 // 会先调用 ajaxPrefilter 这个函数
 // 在这个函数中，可以拿到我们给Ajax提供的配置对象
 $.ajaxPrefilter(function(options) {
-  // 在发起真正的 Ajax 请求之前，统一拼接请求的根路径
+  //判断url是否以/my开头加上token startsWith()可以检测是否以某前缀开头返回布尔值
+  if(options.url.startsWith('/my')){
+    options.headers = {
+      Authorization: localStorage.getItem('token') || ''
+    }
+  }
+   // 在发起真正的 Ajax 请求之前，统一拼接请求的根路径
   options.url = 'http://ajax.frontend.itheima.net' + options.url
+  options.complete = function(res){
+    console.log(res);
+    console.log(res.responseJSON.status);
+    if(res.responseJSON.status === 1 && res.responseJSON.message === '身份认证失败！' ){
+      localStorage.removeItem('token')
+      window.location = '/login.html'
+    }
+  }
 })

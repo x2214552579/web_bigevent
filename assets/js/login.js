@@ -50,7 +50,7 @@ $(function(){
                 }
                 layer.msg('登录成功')
                 localStorage.setItem('token',res.token)
-                window.location = 'index.html'
+                window.location = '/index.html'
             }
         })
         return false;
